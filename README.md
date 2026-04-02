@@ -170,9 +170,7 @@ Documents are uploaded to IPFS via Pinata:
 3. CID and document hash are stored on blockchain
 4. Documents can be retrieved from IPFS gateway: `https://ipfs.io/ipfs/{CID}`
 
-```javascript
-const pinataJWT = "YOUR_JWT_TOKEN"; // Required for uploads
-```
+
 
 ---
 
