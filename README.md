@@ -148,7 +148,9 @@ window.CONTRACT = {
 ```bash
 python -m http.server 8000
 # Visit: http://localhost:8000
-``` Details
+```
+
+## ⚙️ Configuration
 
 ### Smart Contract Configuration
 
@@ -178,7 +180,30 @@ Documents are uploaded to IPFS via Pinata:
 
 ### For Document Owners/Admins
 
-###Navigate to "Upload" page
+#### 1️⃣ Add Authorized Exporters
+
+```
+1. Click "Admin" in navigation
+2. Enter exporter's MetaMask address
+3. Click "Add Exporter"
+4. Approve transaction in MetaMask
+```
+
+Only exporters can upload documents to the system.
+
+#### 2️⃣ Manage Documents
+
+Access the Admin Dashboard to:
+- View all uploaded documents
+- Monitor exporter activities
+- Revoke access if needed
+
+### For Exporters
+
+#### 📤 Upload Documents
+
+```
+1. Navigate to "Upload" page
 2. Connect wallet (MetaMask)
 3. Select document file (PDF, DOCX, TXT, etc.)
 4. Click "Hashing Your Document" (generates SHA3 hash)
@@ -200,6 +225,14 @@ Documents are uploaded to IPFS via Pinata:
 
 #### Supported Formats
 - **Documents**: PDF, DOCX, DOC, TXT
+- **Spreadsheets**: XLSX, XLS, CSV
+- **Images**: PNG, JPG, JPEG, SVG
+- **Other**: Most binary and text formats
+
+### For Verifiers
+
+#### ✅ Verify Documents
+
 Two ways to verify:
 
 **Method 1: Direct Verification**
@@ -236,38 +269,7 @@ After verification, you can:
 - Click "Generate QR Code" to create a shareable QR
 - QR points to IPFS document for public access
 - Share with others for instant verification
-- QR download option availabl
-- Document metadata saved
-
-#### Supported Formats
-- PDF (.pdf)
-- Documents (.docx, .doc, .txt)
-- Spreadsheets (.xlsx, .xls, .csv)
-- Images (.png, .jpg, .jpeg)
-
-### For Verifiers
-
-#### ✅ Verify Documents
-
-```
-1. Click "Verify" in navigation
-2. Select document from dropdown
-3. Review document details
-4. Click "Verify"
-```
-
-**Verification Process:**
-- Retrieves document from IPFS
-- Decrypts document locally
-- Computes hash of retrieved document
-- Compares with blockchain-stored hash
-- Displays: ✅ Authentic or ❌ Tampered
-
-#### Generate QR Code
-
-- Click "Generate QR Code" after verification
-- Share QR code with others for quick verification link
-- QR code encodes document hash for easy reference
+- QR download option available
 
 ---
 
@@ -297,55 +299,85 @@ After verification, you can:
 
 **Upload:**
 ```
-Document → Encrypt → IPFS → Store (CID, Hash) → Blockchain
+Document → Hash → IPFS → Store (CID, Hash) → Blockchain
 ```
 
-**Ver❌ "MetaMask not detected" or "Connect Wallet" not working
-- ✅ Install [MetaMask extension](https://metamask.io/)
-- ✅ Refresh page (F5)
-- ✅ Check MetaMask icon in toolbar - make sure extension is enabled
-- ✅ Allow dApp to access MetaMask (check browser warnings)
-- ✅ Try incognito mode (might have extension conflicts)
+**Verification:**
+```
+Blockchain → Retrieve from IPFS → Hash Check → Result
+```
 
-#### ❌ "Contract address undefined" error
-- ✅ Open `js/App.js` and verify `CONTRACT.address` is set to valid contract address
-- ✅ Ensure contract is deployed to the same network as MetaMask
-- ✅ Check contract was successfully deployed in Remix
-- ✅ Contract address should start with `0x`
+---
 
-#### ❌ "IPFS upload fails" or "Pinata Error"
-- ✅ Check Pinata JWT token in `js/App.js` (should not be `"//"`)
-- ✅ Verify Pinata account is active at [pinata.cloud](https://pinata.cloud/)
-- ✅ Check file size (recommended < 100MB)
-- ✅ Verify internet connection is stable
-- ✅ Check browser console (F12) for exact error message
+## 📁 File Structure
 
-#### ❌ "Wrong Network" error
-- ✅ Open MetaMask
-- ✅ Switch to **Sepolia** testnet (or your configured network)
-- ✅ Refresh the page
-- ✅ If network missing, add it manually in MetaMask settings
-- ✅ RPC URL: `https://ethereum-sepolia-rpc.publicnode.com`
+```
+.
+├── index.html              # Main landing page
+├── upload.html             # Document upload interface
+├── verify.html             # Document verification interface
+├── admin.html              # Admin dashboard
+├── delete.html             # Document deletion interface
+├── package.json            # Project dependencies
+├── README.md               # This file
+│
+├── Contract/
+│   └── Verfication.sol     # Smart contract (Solidity)
+│
+├── js/
+│   ├── App.js              # Main application logic & Web3 integration
+│   ├── Encryption.js       # Encryption/Decryption functions
+│   ├── script.js           # UI interactions & event handlers
+│   ├── Web3.js             # Web3 library
+│   ├── bootstrap.min.js    # Bootstrap framework
+│   ├── qrcode.min.js       # QR code generation
+│   ├── aos.js              # Animation on scroll
+│   └── purecounter.min.js  # Number animations
+│
+├── css/
+│   ├── main.css            # Custom styles
+│   ├── darkmode.css        # Dark mode theme
+│   ├── bootstrap.min.css   # Bootstrap styles
+│   ├── loader.css          # Loading animations
+│   └── aos.min.css         # Scroll animations
+│
+└── assets/
+    └── images/             # UI images and icons
+```
 
-#### ❌ "Insufficient Balance" during transaction
-- ✅ Ensure wallet has Sepolia ETH
-- ✅ Get free testnet ETH from [Sepoliafaucet.com](https://sepoliafaucet.com/)
-- ✅ Wait for faucet transaction to complete
-- ✅ Check balance in MetaMask
+---
 
-#### ❌ "Gas Estimation Failed"
-- ✅ Increase gas limit manually in transaction modal
-- ✅ Ensure adequate wallet balance
-- ✅ Try transaction again after a few minutes
-- ✅ Check if contract is correctly deployed
+##  ❌ "Blank screen" or page not loading
+- ✅ Clear browser cache and cookies
+- ✅ Check browser console (F12 → Console tab) for errors
+- ✅ Ensure JavaScript is enabled
+- ✅ Try different browser or incognito mode
+- ✅ Check that all CDN links are loading (check Network tab)
 
-#### ❌ "Document not found" after verification
-- ✅ Verify document was successfully uploaded (check transaction receipt)
-- ✅ Check IPFS status at [IPFS.io](https://ipfs.io/)
-- ✅ Wait 30-60 seconds for IPFS network propagation
-- ✅ Try accessing directly: `https://ipfs.io/ipfs/{CID}`
+### Debug Mode
 
-####**Blockchain-verified hashes** - Document integrity guaranteed by Smart Contract
+1. **Open Browser Console**: Press `F12`
+2. **Check Console** for error messages
+3. **Check Network tab** to see API calls
+4. **Check Application tab** to view localStorage values:
+   - `userAddress` - connected wallet address
+5. **Share console errors** when seeking help
+
+### Getting Help
+
+- Report issues with full error message from console
+- Include transaction hash for failed transactions
+- Check [Web3.js docs](https://web3js.readthedocs.io/) for API errors
+- Review [Pinata docs](https://docs.pinata.cloud/) for upload issues
+- Check [MetaMask docs](https://docs.metamask.io/) for wallet issues
+
+---
+
+## 🔒 Security Considerations
+
+### Current Implementation
+
+- ✅ **Blockchain-verified hashes** - Document integrity guaranteed by Smart Contract
 - ✅ **Immutable records** - All documents permanently recorded on blockchain
 - ✅ **MetaMask integration** - Secure wallet-based authentication
 - ✅ **Role-based access control** - Owner, Exporter, and Verifier roles
@@ -430,36 +462,10 @@ Document → Encrypt → IPFS → Store (CID, Hash) → Blockchain
 - [ ] Monitoring and logging in place
 - [ ] Disaster recovery plan ready
 - [ ] User documentation complete
-└── assets/
-    └── images/             # UI images and icons
-```
 
 ---
 
-## 🐛 Troubleshooting
 
-### Common Issues & Solutions
-
-#### "MetaMask not detected"
-- ✅ Install MetaMask extension
-- ✅ Refresh the page
-- ✅ Check if MetaMask is authorized for the site
-
-#### "Contract address undefined"
-- ✅ Verify contract address in `js/App.js`
-- ✅ Ensure address matches deployed network
-- ✅ Contract must be deployed before using dApp
-
-#### "IPFS upload fails"
-- ✅ Check Infura API credentials
-- ✅ Verify internet connection
-- ✅ Check if file size exceeds limits
-- ✅ Ensure Infura account is active
-
-#### "Wrong network error"
-- ✅ Open MetaMask
-- ✅ Switch to the correct network
-- ✅ Refresh the page
 - ✅ Update RPC URL in `App.js` if needed
 
 #### "Gas estimation failed"
@@ -502,17 +508,7 @@ Document → Encrypt → IPFS → Store (CID, Hash) → Blockchain
 6. **Access Control**: Strengthen authorization mechanisms
 7. **Error Handling**: Avoid exposing sensitive information in errors
 
-### Best Practices
-
-- Store sensitive configuration in environment variables (`.env`)
-- Use hardware wallets (Ledger, Trezor) for production
-- Implement multi-signature contracts for critical functions
-- Regular security audits and updates
-- Keep Web3.js and dependencies updated
-
 ---
-
-
 
 ## 🙏 Acknowledgments
 
@@ -521,7 +517,7 @@ This project builds upon the work and documentation of:
 - **Metamask** - [Documentation](https://docs.metamask.io/)
 - **Solidity** - [Documentation](https://docs.soliditylang.org/)
 - **Web3.js** - [Documentation](https://web3js.readthedocs.io/)
-- **IPFS & Infura** - [Documentation](https://infura.io/docs)
+- **IPFS & Pinata** - [Documentation](https://docs.pinata.cloud/)
 - **Bootstrap** - For UI components
 
 Special thanks to the Ethereum and IPFS communities for their continuous support and innovation.
